@@ -43,8 +43,19 @@ def popup(title, message):
 def inlimits(timestamp):
 	timestamp = datetime.datetime.strptime(timestamp,"%Y-%m-%d %H:%M:%S")
 	# print contest_time <= timestamp
-	return local_to_cftz(contest_config['start-time']) <= timestamp
+	return timestamp - local_to_cftz(contest_config['start-time'])
 
+def timeDeco(timediff):
+	total_seconds = timediff.total_seconds()
+	hours = total_seconds/3600
+	total_seconds %= 3600
+	minutes = total_seconds/60 + int(bool(total_seconds%60>0))
+	decorated_time = ""
+	if hours:
+		decorated_time+="%d hour(s) " %(hours)
+	if minutes:
+		decorated_time+="%d minute(s) " %(minutes)
+	return decorated_time
 def text(td):
 	return td.text.strip()
 
@@ -70,12 +81,12 @@ def scrape(url, username):
 	trs = table.findAll('tr')
 	c = 2 # counter for row num
 	data = strip_row(trs[1])
-	while data['subid'] != userlog[username] and inlimits(data['timestamp']):
+	while data['subid'] != userlog[username] and inlimits(data['timestamp'])>=0:
 		if c == 2:
 			userlog[username] = data['subid']
 
 		if data['verdict'] == "Accepted":
-			popup(data['username'],'AC on '+data['prob_name']+' \nat '+data['timestamp'])
+			popup(data['username'],'AC on '+data['prob_name']+' \n'+ timeDeco(inlimits(data['timestamp'])) +' ago')
 			# break
 		data = strip_row(trs[c])
 		c += 1
