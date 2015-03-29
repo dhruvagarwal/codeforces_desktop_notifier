@@ -87,6 +87,9 @@ if __name__ == "__main__":
 	contest_config = configure_contest()
 	usernames = open('targets.txt').read().split()
 	init_temp(usernames)
+	if contest_config['start-time'] > datetime.datetime.now():
+		print 'Please Wait until the contest starts !\nScript will start automatically on event start\nDon\'t Terminate this process'
+		time.sleep((contest_config['start-time'] - datetime.datetime.now()).total_seconds())
 	while contest_config['start-time']+datetime.timedelta(hours = int(contest_config['duration']),minutes = 60*(contest_config['duration'] - int(contest_config['duration']))) > datetime.datetime.now() :
 		for username in usernames:
 			# TODO: make all threads
