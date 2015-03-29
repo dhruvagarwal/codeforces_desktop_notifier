@@ -2,6 +2,16 @@ from bs4 import BeautifulSoup as BS
 import requests,json,os
 import pynotify as pn
 import datetime,time
+import threading
+
+class mythread (threading.Thread):
+		def __init__(self,username):
+			threading.Thread.__init__(self)
+			self.username=username
+		def run(self):
+			threadLock.acquire()
+			scrape(_basic_url,self.username)
+			threadLock.release()
 
 def init_temp(usernames):
 	global userlog
@@ -52,6 +62,7 @@ def strip_row(tr):
 	return data_dict
 
 def scrape(url, username):
+	print username
 	r = requests.get(url + username)
 	html = r.content
 	soup = BS(html)
@@ -90,10 +101,13 @@ if __name__ == "__main__":
 	if contest_config['start-time'] > datetime.datetime.now():
 		print 'Please Wait until the contest starts !\nScript will start automatically on event start\nDon\'t Terminate this process'
 		time.sleep((contest_config['start-time'] - datetime.datetime.now()).total_seconds())
+	print 'Welcome to the Codeforces Desktop Notifier! \nHappy Coding !!'
+	threadLock = threading.Lock()
 	while contest_config['start-time']+datetime.timedelta(hours = int(contest_config['duration']),minutes = 60*(contest_config['duration'] - int(contest_config['duration']))) > datetime.datetime.now() :
 		for username in usernames:
-			# TODO: make all threads
-			scrape(_basic_url, username)
+			scrape_thread = mythread(username)
+			scrape_thread.start()
+		# print 'round complete'
 		time.sleep(180) # for 3 minutes
 	print 'It\'s Over Now !'
 	rem_temp()
