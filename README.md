@@ -14,12 +14,11 @@ Steps to setup this script
 * sudo pip install beautifulsoup4
 * sudo pip install requests
 * Install pynotify from [here](http://download.gna.org/py-notify/index.html), extract the tar file and do
-
-	sudo python setup.py install
-
+ 
+		sudo python setup.py install
 * Now Adding all the dependencies, be free to run 
-	
-	python main.py
+
+		python main.py
 * Add the target handles to targets.txt , you can keep adding handles in this text file (Tip : better to have a timely backup !)
 
 Tips
