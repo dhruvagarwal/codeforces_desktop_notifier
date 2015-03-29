@@ -9,6 +9,8 @@ Features
 * It lets you make a target list 
 * for the specified time, it monitors the targets and gives you a desktop notification if they grab an AC to a problem
 
+![Sample Notification](http://i.imgur.com/2HuUx9X.png)
+
 Steps to setup this script
 -----------------------------
 * sudo pip install beautifulsoup4
